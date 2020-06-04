@@ -1,4 +1,4 @@
-module github.com/tomas-novotny/modules-test
+module github.com/tomas-novotny/go-modules-test
 
 go 1.14
 
