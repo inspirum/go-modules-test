@@ -1,4 +1,4 @@
-module github.com/inspirum/modules-test
+module github.com/tomas-novotny/modules-test
 
 go 1.14
 
