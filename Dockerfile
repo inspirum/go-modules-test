@@ -3,13 +3,6 @@ FROM golang:1.14-alpine AS dependencies
 RUN apk add --no-cache \
     git
 
-WORKDIR /tmp/svgcleaner
-
-RUN curl -fsL "https://github.com/RazrFalcon/svgcleaner-gui/releases/download/v0.9.5/svgcleaner_linux_x86_64_0.9.5.tar.gz" | tar -xz \
-    && chmod +x svgcleaner \
-    && mv svgcleaner /usr/bin/svgcleaner \
-    && rm -rf /tmp/svgcleaner
-
 WORKDIR /tmp/build
 
 COPY go.mod .
@@ -24,17 +17,6 @@ RUN go build -o ./out/resizer .
 FROM alpine
 
 ENV STORAGE_LOCAL_PREFIX=/var/www/cache/
-
-RUN apk add --no-cache \
-        imagemagick \
-        pngquant \
-        jpegoptim \
-        gifsicle \
-        cwebp \
-        file && \
-    mkdir -p /var/www/cache
-
-COPY --from=dependencies /usr/bin/svgcleaner /usr/bin/svgcleaner
 
 WORKDIR /var/www/
 
