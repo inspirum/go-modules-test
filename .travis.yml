@@ -6,7 +6,7 @@ go:
   - "1.14"
 
 env:
-  - DOCKERHUB_REPOSITORY="inspirum/go-modules-test"
+  - DOCKERHUB_REPOSITORY=inspirum/go-modules-test
 
 services:
   - docker
@@ -20,13 +20,6 @@ script:
 after_success:
   - echo $DOCKER_PASSWORD | docker login --username $DOCKER_USER --password-stdin
   - docker tag "latest" $DOCKERHUB_REPOSITORY:$TRAVIS_BUILD_NUMBER
-  - docker push $$DOCKERHUB_REPOSITORY:$TRAVIS_BUILD_NUMBER
+  - docker push $DOCKERHUB_REPOSITORY:$TRAVIS_BUILD_NUMBER
   - docker tag "latest" $DOCKERHUB_REPOSITORY:latest
-  - docker push $$DOCKERHUB_REPOSITORY:latest
-
-deploy:
-  provider: script
-  script: bash scripts/deploy.sh production $TRAVIS_TAG
-  on:
-    tags: true
-    all_branches: true
+  - docker push $DOCKERHUB_REPOSITORY:latest
