@@ -7,8 +7,10 @@ go:
   - "1.14"
 
 env:
-  - DOCKER_REPOSITORY=inspirum/go-modules-test
-  - DOCKER_LOCAL_TAG=$TRAVIS_BUILD_NUMBER
+  global:
+    - DOCKER_REPOSITORY=inspirum/go-modules-test
+    - DOCKER_LOCAL_TAG=$TRAVIS_BUILD_NUMBER
+  jobs: []
 
 services:
   - docker
