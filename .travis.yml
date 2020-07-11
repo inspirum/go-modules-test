@@ -1,6 +1,7 @@
 os: linux
 dist: trusty
 language: go
+fail_fast: true
 
 go:
   - "1.14"
