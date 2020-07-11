@@ -6,7 +6,8 @@ go:
   - "1.14"
 
 env:
-  - DOCKERHUB_REPOSITORY=inspirum/go-modules-test
+  - DOCKER_REPOSITORY=inspirum/go-modules-test
+  - DOCKER_LOCAL_TAG=$TRAVIS_BUILD_NUMBER
 
 services:
   - docker
@@ -14,12 +15,14 @@ services:
 script:
   - go mod download
   - go test
-  - docker build --no-cache -t "latest" .
-#  - docker build --no-cache -t "$TRAVIS_TAG" .
+  - docker build --no-cache -t $DOCKER_LOCAL_TAG .
 
 after_success:
-  - echo $DOCKER_PASSWORD | docker login --username $DOCKER_USER --password-stdin
-  - docker tag "latest" $DOCKERHUB_REPOSITORY:$TRAVIS_BUILD_NUMBER
-  - docker push $DOCKERHUB_REPOSITORY:$TRAVIS_BUILD_NUMBER
-  - docker tag "latest" $DOCKERHUB_REPOSITORY:latest
-  - docker push $DOCKERHUB_REPOSITORY:latest
+  - |
+    if [[ "$TRAVIS_TAG" != "" ]]; then
+      echo $DOCKER_PASSWORD | docker login --username $DOCKER_USER --password-stdin
+      docker tag $DOCKER_LOCAL_TAG $DOCKERHUB_REPOSITORY:$TRAVIS_TAG
+      docker push $DOCKERHUB_REPOSITORY:$TRAVIS_TAG
+      docker tag $DOCKER_LOCAL_TAG $DOCKERHUB_REPOSITORY:latest
+      docker push $DOCKERHUB_REPOSITORY:latest
+    fi
